@@ -1,5 +1,5 @@
 # **Linux Knowledge**
-## ***I) Linux Basic ( LPI-01 )***
+### **I) Linux Basic ( LPI-01 )**
 [**1) Unix , GNU and Linux**](https://github.com/QuocCuong97/Linux/blob/master/docs/01_Unix_GNU_Linux.md)<br>
 [**2) Open-Source Licenses**](https://github.com/QuocCuong97/Linux/blob/master/docs02_Open-Source_Licenses.md)<br>
 [3) **Distro Linux**](https://github.com/QuocCuong97/Linux/blob/master/docs04_Distro_Linux.md)<br>
@@ -38,4 +38,4 @@
 [**36) GRUB Configurations**](https://github.com/QuocCuong97/Linux/blob/master/docs/35_GRUB_Configuration.md)<br>
 **36) Something Else**<br>
 
-## ***II) Services***
+### **II) Services ( LPI-02 )**
