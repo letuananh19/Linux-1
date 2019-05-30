@@ -1,17 +1,17 @@
 # **Linux Knowledge**
 ### **I) Linux Basic ( LPI-01 )**
 [**1) Unix , GNU and Linux**](https://github.com/QuocCuong97/Linux/blob/master/docs/01_Unix_GNU_Linux.md)<br>
-[**2) Open-Source Licenses**](https://github.com/QuocCuong97/Linux/blob/master/docs02_Open-Source_Licenses.md)<br>
-[3) **Distro Linux**](https://github.com/QuocCuong97/Linux/blob/master/docs04_Distro_Linux.md)<br>
-[**4) Linux Components**](https://github.com/QuocCuong97/Linux/blob/master/docs05_Linux_Components.md)<br>
-[**5) Boot and Runlevels**](https://github.com/QuocCuong97/Linux/blob/master/docs06_Boot_and_Runlevels.md)<br>
+[**2) Open-Source Licenses**](https://github.com/QuocCuong97/Linux/blob/master/docs/02_Open-Source_Licenses.md)<br>
+[3) **Distro Linux**](https://github.com/QuocCuong97/Linux/blob/master/docs/04_Distro_Linux.md)<br>
+[**4) Linux Components**](https://github.com/QuocCuong97/Linux/blob/master/docs/05_Linux_Components.md)<br>
+[**5) Boot and Runlevels**](https://github.com/QuocCuong97/Linux/blob/master/docs/06_Boot_and_Runlevels.md)<br>
 [**6) File System**](https://github.com/QuocCuong97/Linux/blob/master/docs/07_File_System.md)<br>
-[**7) File System Format**](https://github.com/QuocCuong97/Linux/blob/master/docs20_File_System_Format.md)<br>
+[**7) File System Format**](https://github.com/QuocCuong97/Linux/blob/master/docs/20_File_System_Format.md)<br>
 [**8) Basic Commands**](https://github.com/QuocCuong97/Linux/blob/master/docs/08_Basic_Commands.md)<br>
 [**9) Searching Commands**](https://github.com/QuocCuong97/Linux/blob/master/docs/10_Searching_Commands.md)<br>
-[**10) Text Commands**](https://github.com/QuocCuong97/Linux/blob/master/docs09_Text_Commands.md)<br>
-[**11) Text Editors**](https://github.com/QuocCuong97/Linux/blob/master/docs15_Text_Editors.md)<br>
-[**12) Extract Files**](https://github.com/QuocCuong97/Linux/blob/master/docs13_Extract_Files.md)<br>
+[**10) Text Commands**](https://github.com/QuocCuong97/Linux/blob/master/docs/09_Text_Commands.md)<br>
+[**11) Text Editors**](https://github.com/QuocCuong97/Linux/blob/master/docs/15_Text_Editors.md)<br>
+[**12) Extract Files**](https://github.com/QuocCuong97/Linux/blob/master/docs/13_Extract_Files.md)<br>
 [**13) Softwares Installation**](https://github.com/QuocCuong97/Linux/blob/master/docs/14_Software_Installation.md)<br>
 [**14) Network Configurations**](https://github.com/QuocCuong97/Linux/blob/master/docs/12_Network_Configuration.md)<br>
 [**15) Network Advanced**](https://github.com/QuocCuong97/Linux/blob/master/docs/42_Network_Advanced.md)<br>
