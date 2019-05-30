@@ -6,6 +6,8 @@
     - Không làm hỏng dịch vụ
     - Có thể kết hợp với cơ chế ***hot swapping*** ( phương pháp thay thế nóng các thành phần bên trong máy tính )
 ## **1) Mô hình các thành phần trong LVM**
+<p align=center><img src=https://i.imgur.com/UqevOfJ.png></p>
+
 ### **1.1) Hard drives - Drives**
 - Là các thiết bị lưu trữ dữ liệu , có dạng `/dev/xxxx`
 ### **1.2) Partition**
@@ -26,12 +28,48 @@
 ### **1.5) Logical Volume**
 - **Volume Group** được chia nhỏ thành các **Logical Volume** , mỗi **Logical Volume** có ý nghĩa tương tự 1 partition . Nó được dùng cho các mount point và được format với những định dạng khác nhau như `ext2` , `ext3` , `ext4` , `xfs` ,...
 - Khi dung lượng của **Physical volume** được sử dụng hết ta có thể đưa thêm ổ đĩa mới bổ sung cho **Volume Group** và do đó tăng được dung lượng của **Logical Volume** .<br>**VD :** Có thể tạo ra 4 ổ đĩa mỗi ổ `5GB` , kết hợp thành 1 **Volume Group** `20G`  , có thể tạo ra 2 **Logical Volume** mỗi cái `10G` .
-### **1.6) File Systems**
-- Tổ chức và kiểm soát các tập tin
-- Được lưu trữ trên ổ đĩa cho phép truy cập nhanh chóng và an toàn
-- Sắp xếp dữ liệu đĩa cứng trên máy tính
-- Quản lý vị trí vật lý của mọi thành phần dữ liệu
-### **1.7) Physical Extend ( PE )**
+#### **1.5.1) Linear Volumes ( ~ Span Volume )**
+<p align=center><img src=https://i.imgur.com/wirelIY.png width=50%></p>
+
+- Là một **Logical Volume** bình thường được tạo ra từ **Volume Group**
+- Các **Physical Volume** thành phần tạo nên **Volume Group** không nhất thiết phải giống nhau về dung lượng .
+- Có thể tạo ra nhiều **Linear Volume** với dung lượng tùy ý trên **Volume Group** được tạo ra .
+- **Linear** không có khả năng đáp ứng vấn đề an toàn dữ liệu ( **Fault Tolerangcing** ) , và tốc độ xử lý dữ liệu ( **Load Balancing** )
+#### **1.5.2) Stripped Logical Volume ( ~ RAID 0 )**
+- Khi dữ liệu được ghi vào **Logical Volume** , file system sẽ đẩy dữ liệu xuống các **Physical Volume** .
+- Có thể kiểm soát việc ghi dữ liệu vào các **Physical Volume** bằng cách tạo ra **Stripped Logical Volume** . 
+- **Stripping** giúp tăng cường hiệu suất đọc/ghi dữ liệu bằng cách quyết định trước việc ghi dữ liệu vào **Physical Volume** theo tuần tự . Quá trình đọc/ghi có thể được thực hiện song song .
+<p align=center><img src=https://i.imgur.com/TIfzYVP.png width=50%></p>
+
+- Trong hình trên :
+    - Luồng dữ liệu thứ nhất được ghi vào **PV1**
+    - Luồng dữ liệu thứ hai được ghi vào **PV2**
+    - Luồng dữ liệu thứ ba được ghi vào **PV3**
+    - Luồng dữ liệu thứ 4 được lưu vào **PV1**
+    - Kích thước của 1 luồng dữ liệu không vượt quá kích thước của 1 **PE**  .
+- **Stripped Logical Volume** có thể được mở rộng .<br>**VD :** Có 1 ổ **Stripped** đã sử dụng hết dung lượng của **Volume Group** ( được tạo thành từ 2 **Physical Volume** ) . Nếu muốn tăng thêm kích thước cho **Stripped Volume** , phải nhóm thêm vào **Volume Group** 2 **Physical Volume** khác nữa , nếu chỉ nhóm thêm 1 thì sẽ không được .
+- **Striped** đáp ứng được vấn đề tốc độ xử lý dữ liệu ( **Load Balancing** ) , tuy nhiên không đáp ứng được vấn đề an toàn dữ liệu ( **Fault Tolerangcing** )
+#### **1.5.3) Thinly-Provisioned Logical Volumes ( Thin Volumes )**
+- **Thin Volume** được tạo ra có 1 dung lượng chia sẵn ( ***allocated size*** ) nhưng chỉ chiếm dung lượng của ổ đĩa đúng bằng dung lượng của dữ liệu thực tế có trên **Volume**  ( ***used size*** ) .
+- **VD :** chia ổ ảo `30G` nhưng hiện tại chỉ sử dụng `10G` thì trên ổ đĩa vật lý chỉ chiếm `10G` không gian thực .
+
+    <img src=https://i.imgur.com/cYzr8td.jpg>
+
+#### **1.5.4) Thickly-Provisioned Logical Volumes ( Thick Volumes )**
+- **Thick Volume** được tạo ra có 1 dung lượng chia sẵn ( ***allocated size*** ) và chiếm đúng bằng đó dung lượng của ổ đĩa mặc dù dữ liệu bên trong ít hơn .
+- **VD :** chia ổ ảo `30G` , thực tế đang sử dụng hết `10G` nhưng trên ổ đĩa vật lý vẫn chiếm `30G` không gian đĩa .
+
+    <img src=https://i.imgur.com/B4XiRaQ.jpg>
+
+#### **1.5.5) Snapshot Volumes**
+- Tính năng **LVM Snapshot** cung cấp tạo ra 1 bản sao ổ đĩa tại thời điểm hiện tại mà không làm gián đoạn các dịch vụ .
+- Khi thực hiện **snapshot** trên ổ đĩa gốc , tính năng này sẽ thực hiện tạo ra 1 bản sao của vùng dữ liệu đang có trên máy tính và có thể dùng nó để khôi phục lại trạng thái cũ .
+- Vì **snapshot** chỉ lưu lại các vùng dữ liệu thay đổi sau khi thực hiện , nên **snapshot volume** cần một dung lượng tối thiểu của đĩa cứng . **VD :** Nếu ít thực hiện thay đổi trên ổ đĩa , **snapshot volume** chỉ chiếm khoảng `3-5%` dung lượng của đĩa cứng .
+- **Snapshot** chỉ thực hiện tạo ra 1 bản sao ảo , không thể thay thế hoàn toàn quá trình sao lưu dữ liệu .
+#### **1.5.6) Thinly-Provisioned Snapshot Volumes**
+#### **1.5.7) Cache Volumes**
+
+### **1.6) Physical Extend ( PE )**
 - Là 1 đại lượng thể hiện 1 khối dữ liệu dùng làm đơn vị tính dung lượng của **Logical Volume** .
 ## **2) Ưu điểm và nhược điểm của LVM**
 ### **2.1) Ưu điểm**
@@ -60,7 +98,7 @@
     - `lvremove` : xóa **logical volume**
     - `lvextend` : tăng dung lượng **logical volume**
     - `lvreduce` : giảm dung lượng **logical volume**
-## **4) Các bước tạo LVM**
+## **4) Các bước tạo Linear Volume**
 - Thêm 4 ổ cứng `sdb` , `sdc` , `sdd` , `sde` vào Server
 - **B1 :** Kiểm tra các hard drive có trên hệ thống :
     ```
