@@ -115,7 +115,44 @@ USERCTL=no
 
     <img src=https://i.imgur.com/rbU1tFV.png>
 
-## **4) Thay đổi card mạng về dạng `eth*`**
+## **4) Cấu hình bằng `nmcli`**
+- Đây là công cụ giúp điều khiển trình quản lý mạng trong Linux bằng dòng lệnh .
+- Xem các trạng thái kết nối cơ bản :
+    ```
+    # nmcli [options] [command] [arguments]
+    ```
+    - **Options :**
+        - `-a` : hiển thị đầy đủ thông tin về phần cứng card mạng gồm MAC , MTU , IP ,...
+        - `-v` : hiển thị version của `nmcli`
+    - **Commands + Arguments :**
+        - `general` :
+            - `status` :
+            - `hostname` : hiển thị hostname
+        - `network` :
+            - `on` : enable card mạng
+            - `off` : disable card mạng
+            - `connectivity` : xem trạng thái kết nối :
+                - *full* : đã kết nối mạng và được truy cập Internet
+                - *limited* : đã kết nối mạng nhưng không được phép truy cập Internet
+                - *none* : chưa được kết nối mạng
+        - `radio` :
+            - `all` : hiển thị trạng thái tất cả các kết nối không dây
+            - `wifi` : hiển thị trạng thái wifi
+                - `off` : disable card wifi
+                - `on` : enable card wifi
+        - `monitor` : quản lý status mạng theo runtime
+        - `connection` ( `con` ): 
+            - `show --active` : hiển thị các kết nối đang active
+        - `device ( dev )` : 
+            - `status` : hiển thị trạng thái các interface
+            - `show if_name` : hiển thị thông tin chi tiết của interface
+            - `wifi list` : liệt kê các sóng wifi bắt được
+                - `--auto` : 
+                - `--rescan` :
+            - `wifi connect` : kết nối tới mạng wifi đã biết
+                - `SSID password "password"`
+            - 
+## **5) Thay đổi card mạng về dạng `eth*`**
 - **B1 :** Kiểm tra thông tin interface hiện tại :
     ```
     # ifconfig
