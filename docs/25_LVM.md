@@ -68,6 +68,11 @@
 - **Snapshot** chỉ thực hiện tạo ra 1 bản sao ảo , không thể thay thế hoàn toàn quá trình sao lưu dữ liệu .
 #### **1.5.6) Thinly-Provisioned Snapshot Volumes**
 #### **1.5.7) Cache Volumes**
+- **LVM** hỗ trợ việc sử dụng các ổ cứng tốc độ cao ( như **SSD** ) để chi lại cache cho các ổ cứng tốc độ chậm hơn ( như **HDD** ) .
+
+    <p align=center><img src=https://i.imgur.com/bpTzibn.png></p>
+    
+- Có thể tạo ra **cache logical volume** để cải thiện hiệu suất của các **logical volume** có sẵn hoặc tạo **cache volume** gồm các **SSD** tốc độ cao với dung lượng lưu trữ thấp và các **HDD** tốc độ chậm với dung lượng lưu trữ cao .
 
 ### **1.6) Physical Extend ( PE )**
 - Là 1 đại lượng thể hiện 1 khối dữ liệu dùng làm đơn vị tính dung lượng của **Logical Volume** .
