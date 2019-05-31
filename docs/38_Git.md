@@ -45,7 +45,7 @@
     
 - Thêm **private key** vào tiến trình **SSH** :
     ```
-    # ssh-agent-s
+    # ssh-agent -s
     # ssh-add /root/.ssh/id_rsa
     ```
 - Copy **public key**
