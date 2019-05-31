@@ -34,10 +34,11 @@
 - Là một **Logical Volume** bình thường được tạo ra từ **Volume Group**
 - Các **Physical Volume** thành phần tạo nên **Volume Group** không nhất thiết phải giống nhau về dung lượng .
 - Có thể tạo ra nhiều **Linear Volume** với dung lượng tùy ý trên **Volume Group** được tạo ra .
-- **Linear** không có khả năng đáp ứng vấn đề an toàn dữ liệu ( **Fault Tolerangcing** ) , và tốc độ xử lý dữ liệu ( **Load Balancing** )
+- **Linear** không có khả năng đáp ứng vấn đề an toàn dữ liệu ( **Fault Tolerancing** ) , và tốc độ xử lý dữ liệu ( **Load Balancing** )
 #### **1.5.2) Stripped Logical Volume ( ~ RAID 0 )**
 - Khi dữ liệu được ghi vào **Logical Volume** , file system sẽ đẩy dữ liệu xuống các **Physical Volume** .
-- Có thể kiểm soát việc ghi dữ liệu vào các **Physical Volume** bằng cách tạo ra **Stripped Logical Volume** . 
+- Có thể kiểm soát việc ghi dữ liệu vào các **Physical Volume** bằng cách tạo ra **Stripped Logical Volume** .
+    <p align=center><img src=https://i.imgur.com/rV2nIz8.png width=30%></p> 
 - **Stripping** giúp tăng cường hiệu suất đọc/ghi dữ liệu bằng cách quyết định trước việc ghi dữ liệu vào **Physical Volume** theo tuần tự . Quá trình đọc/ghi có thể được thực hiện song song .
 <p align=center><img src=https://i.imgur.com/TIfzYVP.png width=50%></p>
 
@@ -53,13 +54,35 @@
 - **LVM** hỗ trợ **RAID 0 / 1 / 5 / 6 / 10** .
 - **LVM RAID Volume** hỗ trợ **snapshot** .
 - **RAID 1 ( Mirror Volume )**
-    <img src=https://i.imgur.com/zd4MQN5.png width=20%>
-    - Chỉ yêu cầu 2 **physical volumes** thành phần .
+
+    <p align=center><img src=https://i.imgur.com/tnkSBuJ.png width=30%></p>
+
+    - Yêu cầu `2*n` **physical volumes** thành phần .
     - Dữ liệu khi chép trên **mirror** sẽ được backup sang **physical volume** thứ 2 ( vì thế dung lượng trên **mirror volume** chỉ bằng `1/2` dung lượng khi ta cấu hình ) . 
     - **Mirror Volume** đáp ứng nhu cầu an toàn dữ liệu ( **Fault Tolerancing** ) , nhưng không làm tăng tốc độ truy xuất dữ liệu .
 - **RAID 5**
+
+    <p align=center><img src=https://i.imgur.com/D1LWhKI.png width=40%></p>
+
+    - **RAID 5 Volume** là giải pháp kết hợp các loại volume ( **Striped Volume RAID-0** , **Mirror Volume RAID-1** ) .
+    - **RAID 5** đòi hỏi phải sử dụng `3` ổ đĩa cứng vật lý trở lên , và sử dụng thuật toán ***Parity*** ( ***parity*** là đoạn mã để nó kiểm tra tính toàn vẹn của dữ liệu ) . Khi 1 trong 3 đĩa bị hỏng , **RAID 5** sẽ dựa vào các phần dữ liệu còn + ***parity*** để build lại dữ liệu ) .
+    - Vì phải chứa thêm bit ***Parity*** nên dung lượng của **RAID 5 Volume** sẽ chỉ bằng `2/3` dung lượng ta cấu hình ( trong trường hợp có 3 ổ đĩa tham gia cấu hình **RAID 5** ) ( `1/3` còn lại là để chứa bit ***Parity*** ) .
+    - **RAID 5** đáp ứng cả 2 vấn đề an toàn dữ liệu ( **Fault Tolerangcing** ) , và tăng tốc độ xử lý dữ liệu ( **Load Balancing** ) . 
 - **RAID 6**
+
+    <p align=center><img src=https://i.imgur.com/B1RR5sX.png width=40%></p>
+
+    - **RAID 6** là một dạng cải tiến từ **RAID 5** .
+    - Ở **RAID 5** thì mỗi một dữ liệu được tách thành hai vị trí lưu trữ trên hai **physical volume** khác nhau , nhưng ở **RAID 6** thì mỗi dữ liệu lại được lưu trữ ở ít nhất ba vị trí ( trở lên ) .<br>=> Giúp cho sự an toàn của dữ liệu tăng lên so với **RAID 5** .
+    - **RAID 6**  yêu cầu tối thiểu `4` ổ cứng , với `4` ổ cứng thì chúng cho phép hư hỏng đồng thời đến `2` ổ cứng mà hệ thống vẫn làm việc bình thường , điều này tạo ra một xác xuất an toàn rất lớn .<br>=> **RAID 6** thường chỉ được sử dụng trong các máy chủ chứa dữ liệu cực kỳ quan trọng .
 - **RAID 10**
+
+    <p align=center><img src=https://i.imgur.com/3Dy1W2E.png width=40%></p>
+
+    - **RAID 10** là sự kết hợp từ **RAID 0** và **RAID 1** ( **RAID 1 + 0** )
+    - **RAID 10** hoạt động không chỉ đơn giản là đọc và ghi dữ liệu , mà nó còn tự động sao lưu dữ liệu , đồng thời giúp quá trình thay thế hoặc cứu dữ liệu **RAID 10** trở nên dễ dàng hơn mỗi khi có một ổ cứng bị lỗi .
+    - **RAID 10** đòi hỏi tối thiểu 4 **physical volumes** .
+    - Phương thức ghi đồng thời lên tất cả 4 **volume** , 2 volume dạng “**striping**” và 2 volume dạng “**mirror**” – 4 ổ đĩa này phải giống nhau về dung lượng và kiểu loại .
 
 #### **1.5.4) Thinly-Provisioned Logical Volumes ( Thin Volumes )**
 - **Thin Volume** được tạo ra có 1 dung lượng chia sẵn ( ***allocated size*** ) nhưng chỉ chiếm dung lượng của ổ đĩa đúng bằng dung lượng của dữ liệu thực tế có trên **Volume**  ( ***used size*** ) .
