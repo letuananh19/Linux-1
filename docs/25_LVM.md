@@ -48,34 +48,47 @@
     - Luồng dữ liệu thứ 4 được lưu vào **PV1**
     - Kích thước của 1 luồng dữ liệu không vượt quá kích thước của 1 **PE**  .
 - **Stripped Logical Volume** có thể được mở rộng .<br>**VD :** Có 1 ổ **Stripped** đã sử dụng hết dung lượng của **Volume Group** ( được tạo thành từ 2 **Physical Volume** ) . Nếu muốn tăng thêm kích thước cho **Stripped Volume** , phải nhóm thêm vào **Volume Group** 2 **Physical Volume** khác nữa , nếu chỉ nhóm thêm 1 thì sẽ không được .
-- **Striped** đáp ứng được vấn đề tốc độ xử lý dữ liệu ( **Load Balancing** ) , tuy nhiên không đáp ứng được vấn đề an toàn dữ liệu ( **Fault Tolerangcing** )
-#### **1.5.3) Thinly-Provisioned Logical Volumes ( Thin Volumes )**
+- **Striped** đáp ứng được vấn đề tốc độ xử lý dữ liệu ( **Load Balancing** ) , tuy nhiên không đáp ứng được vấn đề an toàn dữ liệu ( **Fault Tolerancing** )
+#### **1.5.3) RAID**
+- **LVM** hỗ trợ **RAID 0 / 1 / 5 / 6 / 10** .
+- **LVM RAID Volume** hỗ trợ **snapshot** .
+- **RAID 1 ( Mirror Volume )**
+    <img src=https://i.imgur.com/zd4MQN5.png width=20%>
+    - Chỉ yêu cầu 2 **physical volumes** thành phần .
+    - Dữ liệu khi chép trên **mirror** sẽ được backup sang **physical volume** thứ 2 ( vì thế dung lượng trên **mirror volume** chỉ bằng `1/2` dung lượng khi ta cấu hình ) . 
+    - **Mirror Volume** đáp ứng nhu cầu an toàn dữ liệu ( **Fault Tolerancing** ) , nhưng không làm tăng tốc độ truy xuất dữ liệu .
+- **RAID 5**
+- **RAID 6**
+- **RAID 10**
+
+#### **1.5.4) Thinly-Provisioned Logical Volumes ( Thin Volumes )**
 - **Thin Volume** được tạo ra có 1 dung lượng chia sẵn ( ***allocated size*** ) nhưng chỉ chiếm dung lượng của ổ đĩa đúng bằng dung lượng của dữ liệu thực tế có trên **Volume**  ( ***used size*** ) .
 - **VD :** chia ổ ảo `30G` nhưng hiện tại chỉ sử dụng `10G` thì trên ổ đĩa vật lý chỉ chiếm `10G` không gian thực .
 
     <img src=https://i.imgur.com/cYzr8td.jpg>
 
-#### **1.5.4) Thickly-Provisioned Logical Volumes ( Thick Volumes )**
+#### **1.5.5) Thickly-Provisioned Logical Volumes ( Thick Volumes )**
 - **Thick Volume** được tạo ra có 1 dung lượng chia sẵn ( ***allocated size*** ) và chiếm đúng bằng đó dung lượng của ổ đĩa mặc dù dữ liệu bên trong ít hơn .
 - **VD :** chia ổ ảo `30G` , thực tế đang sử dụng hết `10G` nhưng trên ổ đĩa vật lý vẫn chiếm `30G` không gian đĩa .
 
     <img src=https://i.imgur.com/B4XiRaQ.jpg>
 
-#### **1.5.5) Snapshot Volumes**
+#### **1.5.6) Snapshot Volumes**
 - Tính năng **LVM Snapshot** cung cấp tạo ra 1 bản sao ổ đĩa tại thời điểm hiện tại mà không làm gián đoạn các dịch vụ .
 - Khi thực hiện **snapshot** trên ổ đĩa gốc , tính năng này sẽ thực hiện tạo ra 1 bản sao của vùng dữ liệu đang có trên máy tính và có thể dùng nó để khôi phục lại trạng thái cũ .
 - Vì **snapshot** chỉ lưu lại các vùng dữ liệu thay đổi sau khi thực hiện , nên **snapshot volume** cần một dung lượng tối thiểu của đĩa cứng . **VD :** Nếu ít thực hiện thay đổi trên ổ đĩa , **snapshot volume** chỉ chiếm khoảng `3-5%` dung lượng của đĩa cứng .
 - **Snapshot** chỉ thực hiện tạo ra 1 bản sao ảo , không thể thay thế hoàn toàn quá trình sao lưu dữ liệu .
-#### **1.5.6) Thinly-Provisioned Snapshot Volumes**
-#### **1.5.7) Cache Volumes**
+#### **1.5.7) Thinly-Provisioned Snapshot Volumes**
+#### **1.5.8) Cache Volumes**
 - **LVM** hỗ trợ việc sử dụng các ổ cứng tốc độ cao ( như **SSD** ) để chi lại cache cho các ổ cứng tốc độ chậm hơn ( như **HDD** ) .
 
     <p align=center><img src=https://i.imgur.com/bpTzibn.png></p>
-    
+
 - Có thể tạo ra **cache logical volume** để cải thiện hiệu suất của các **logical volume** có sẵn hoặc tạo **cache volume** gồm các **SSD** tốc độ cao với dung lượng lưu trữ thấp và các **HDD** tốc độ chậm với dung lượng lưu trữ cao .
 
 ### **1.6) Physical Extend ( PE )**
 - Là 1 đại lượng thể hiện 1 khối dữ liệu dùng làm đơn vị tính dung lượng của **Logical Volume** .
+- Mặc định `1PE = 4MB`
 ## **2) Ưu điểm và nhược điểm của LVM**
 ### **2.1) Ưu điểm**
 - Có thể gom nhiều đĩa cứng vật lý lại thành 1 đĩa ảo dung lượng lớn
