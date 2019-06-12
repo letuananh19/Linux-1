@@ -61,15 +61,21 @@
 ### **Web Services**
 [**16) Apache**]()<br>
 [**17) NGINX**]()<br>
+### **Database**
+[**18) MySQL**]()<br>
+[**19) MariaDB**]()<br>
 ### **E-Mail Services**
-[**18) Postfix , Dovecot**]()<br>
+[**20) Postfix , Dovecot**]()<br>
 ### **Proxy**
-[**19) Squid**]()<br>
+[**21) Squid**]()<br>
+[**22) HAProxy**]()<br>
 ### **Time Server**
-[**20) NTP**]()<br>
+[**23) NTP**]()<br>
 ### **System - Network Security**
-[**21) Firewalld - Shorewall**]()<br>
-[**22) Amanda**]()<br>
-[**23) Cacti**]()<br>
+[**24) Firewalld - Shorewall**]()<br>
+[**25) Amanda**]()<br>
+[**26) Nagios**]()<br>
 ### **VPN**
-[**24) OpenVPN**]()<br>
+[**27) OpenVPN**]()<br>
+### **Network Printer**
+[**28) CUPS**]()
