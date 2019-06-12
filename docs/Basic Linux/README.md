@@ -1,5 +1,5 @@
 # **Linux Knowledge**
-## **I) Basic Linux ( LPI-01 )**
+## **I) Basic Linux ( LPIC-1 )**
 [**1) Unix , GNU and Linux**](https://github.com/QuocCuong97/Linux/blob/master/docs/Basic%20Linux/01_Unix_GNU_Linux.md)<br>
 [**2) Open-Source Licenses**](https://github.com/QuocCuong97/Linux/blob/master/docs/Basic%20Linux/02_Open-Source_Licenses.md)<br>
 [**3) Distro Linux**](https://github.com/QuocCuong97/Linux/blob/master/docs/Basic%20Linux/04_Distro_Linux.md)<br>
@@ -38,7 +38,7 @@
 [**36) GRUB Configurations**](https://github.com/QuocCuong97/Linux/blob/master/docs/Basic%20Linux/35_GRUB_Configuration.md)<br>
 [**37) Something Else**]()<br>
 
-## **II) Services ( LPI-02 )**
+## **II) Services ( LPIC-2 )**
 ### **Remote Server Management**
 [**1) Webmin**]()<br>
 [**2) Cpanel**]()<br>
@@ -47,27 +47,29 @@
 [**5) VNC Server**]()<br>
 [**6) Telnet**]()<br>
 [**7) SSH**]()<br>
-### **IP Configuration**
-[**8) DHCP**]()<br>
 ### **File Sharing**
-[**9) FTP**]()<br>
-[**10) NFS**]()<br>
-[**11) Samba**]()<br>
-### **Central Authentication Service**
-[**12) NIS**]()<br>
-[**13) OpenLDAP**]()<br>
+[**8) FTP**]()<br>
+[**9) NFS**]()<br>
+[**10) Samba**]()<br>
+### **Network Client Management**
+[**11) DHCP**]()<br>
+[**12) PAM**]()<br>
+[**13) NIS**]()<br>
+[**14) OpenLDAP**]()<br>
 ### **Domain Name Server**
-[**14) DNS**]()
+[**15) DNS**]()
 ### **Web Services**
-[**15) Apache**]()<br>
-[**16) NGINX**]()<br>
+[**16) Apache**]()<br>
+[**17) NGINX**]()<br>
 ### **E-Mail Services**
-[**17) Postfix , Dovecot**]()<br>
+[**18) Postfix , Dovecot**]()<br>
 ### **Proxy**
-[**18) Squid**]()<br>
+[**19) Squid**]()<br>
 ### **Time Server**
-[**19) NTP**]()<br>
+[**20) NTP**]()<br>
 ### **System - Network Security**
-[**20) Firewalld - Shorewall**]()<br>
-[**21) Amanda**]()<br>
-[**22) Cacti**]()<br>
+[**21) Firewalld - Shorewall**]()<br>
+[**22) Amanda**]()<br>
+[**23) Cacti**]()<br>
+### **VPN**
+[**24) OpenVPN**]()<br>
