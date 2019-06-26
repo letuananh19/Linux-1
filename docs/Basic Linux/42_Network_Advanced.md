@@ -129,5 +129,49 @@
         - `-e` : Nhận tiêu đề ethernet
         - `-q` : Hiển thị ít thông tin giao thức
         - `-E` : Giải mã lưu lượng IPSEC bằng cách cung cấp khóa mã hóa
-- **TH1 :**
+- **TH1 :** Bắt 1 gói tin có địa chỉ IP từ 1 interface cụ thể ( `n` ):
+    ```
+    # tcpdump -n -i ens33
+    ```
+    <img src=https://i.imgur.com/1Tq29Bj.png>
 
+    - Sử dụng tùy chọn `-n` để lọc gói tin có chứa địa chỉ IP . Nếu không sử dụng tùy chọn này , `tcpdump` sẽ bắt cả các gói tin DNS
+
+- **TH2 :** Hiển thị các network interface có sẵn ( `-D` ) :
+    ```
+    # tcpdump -D
+    ```
+    <img src=https://i.imgur.com/wgSZCWS.png>
+- **TH3 :** Chỉ định số lượng gói tin cần bắt ( `-c` ) :
+    ```
+    # tcpdump -n -c 3 -i ens33
+    ```
+    <img src=https://i.imgur.com/LqtBmoq.png>
+
+- **TH4 :** Hiển thị gói tin dưới dạng HEX ( `-XX` ) và dưới dạng ASCII ( `-A` ) :
+    ```
+    # tcpdump -n -XX -i ens33             (HEX)
+    # tcpdump -n -A -i ens33             (ASCII)
+    ```
+    <img src=https://i.imgur.com/xucBynP.png>
+    <img src=https://i.imgur.com/h5NddKp.png>
+- **TH5 :** Lưu các gói tin đã bắt được vào file `.pcap` :
+    ```
+    # tcpdump -n -w captuted.pcap -i ens33
+    ```
+- **TH6 :** Đọc 1 file `.pcap` :
+    ```
+    # tcpdump -n -r captured.pcap
+    ```
+- **TH7 :** Bắt các gói tin thuộc giao thức cụ thể :
+    ```
+    # tcpdump -n -i ens33 [arp|ip|udp|tcp]
+    ```
+- **TH8 :** Bắt gói tin trên port cụ thể :
+    ```
+    # tcpdump -i ens33 port 22
+    ```
+- **TH9 :** Bắt gói tin trên port cụ thể với IP nguồn và IP đích cụ thể :
+    ```
+    # tcpdump -i ens33 port 22 [src [IP]|dst [IP]]
+    ```
