@@ -103,6 +103,31 @@
     # netstat -np | grep SYN_REC | wc -l
     ```
 ## **8) `tcpdump`**
-
-        
+- **Tcpdump** là phần mềm bắt gói tin trong mạng làm việc trên hầu hết các phiên bản hệ điều hành Unix/Linux . **Tcpdump** cho phép bắt và lưu lại những gói tin bắt được , từ đó chúng ta có thể sử dụng để phân tích .
+- Có thể lưu ra file và đọc bằng công cụ đồ họa **Wireshark** .
+- Cài đặt `tcpdump` :
+    ```
+    # yum install -y tcpdump
+    ```
+- Cấu trúc lệnh :
+    ```
+    # tcpdump [options] [network_interface]
+    ```
+    - **Options** :
+        - `-X` : hiển thị nội dung của gói theo định dạng `ASCII` và `HEX`
+        - `-XX` : tương tự `-X`
+        - `-D` : liệt kê các network interface có sẵn
+        - `-l` : Đầu ra có thể đọc được dòng (để xem khi bạn lưu hoặc gửi đến các lệnh khác)
+        - `-t` : Cung cấp đầu ra dấu thời gian có thể đọc được của con người
+        - `-q` : Ít dài dòng hơn với đầu ra
+        - `-tttt` : Cung cấp đầu ra dấu thời gian tối đa có thể đọc được của con người
+        - `-i` : Bắt lưu lượng của một giao diện cụ thể
+        - `-vv` : Đầu ra cụ thể và chi tiết hơn (nhiều v hơn cho đầu ra nhiều hơn)
+        - `-s` : Xác định snaplength(kích thước) của gói tin theo byte. Sử dụng `-s0` để có được mọi thứ. Nếu không set size packet dump thành unlimit, thì khi tcpdump ra nó bị phân mảnh
+        - `-c` : Chỉ nhận được x số gói và sau đó dừng lại
+        - `-S` : In số thứ tự tuyệt đối
+        - `-e` : Nhận tiêu đề ethernet
+        - `-q` : Hiển thị ít thông tin giao thức
+        - `-E` : Giải mã lưu lượng IPSEC bằng cách cung cấp khóa mã hóa
+- **TH1 :**
 
