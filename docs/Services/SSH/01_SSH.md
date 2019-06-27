@@ -66,10 +66,17 @@
 
 - Gõ `ENTER` để lưu cặp key vào thư mục con `.ssh/` nằm trong thự mục `home` của user hiện hành , hoặc tự chọn 1 đường dẫn khác
 - Nếu trên máy đã có 1 cặp key từ trước đó , bạn sẽ nhìn thấy output sau :
+
+    <img src=https://i.imgur.com/OmlCxbh.png>
 - Nếu chọn "`overwrite the key on disk`" , bạn sẽ không thể xác thực các key đang sử dụng trước đây nữa .
 - Sau khi lựa chọn , sẽ thấy output tiếp theo :
+
+    <img src=https://i.imgur.com/SqYx2Er.png>
+
 - Đây là tùy chọn thêm 1 chuỗi mật khẩu , được khuyến nghị để tăng tính bảo mật . Nếu nhập chuỗi **passphrase** này , bạn sẽ phải gõ thêm chúng bất kỳ lúc nào sử dụng key ( chỉ trừ khi sử dụng phần mềm để SSH đã lưu trữ passphrase ) . Nếu không muốn sử dụng **passphrase** , có thể `ENTER` để bỏ qua . Nếu nhập **passphrase** , sẽ thấy output sau :
-## B2 - Copy Public Key vào SSH Server :
+
+    <img src=https://i.imgur.com/eM8Tr1e.png>
+## Bước 2 - Copy Public Key vào SSH Server :
 - Cách nhanh nhất để copy **Public Key** trên CentOS là sử dụng tiện ích `ssh-copy-id` vì nó khá đơn giản . Nếu không có sẵn `ssh-copy-id` , cần phải copy 1 cách thủ công .
 ### Cách 1 - Copy Public Key sử dụng `ssh-copy-id`
 - Công cụ `ssh-copy-id` thường có sẵn trên nhiều hệ điều hành . Nếu dùng cách này , cần có kết nối SSH bằng mật khẩu từ client đến Server :
@@ -77,17 +84,59 @@
     [root@CentOS7-01~]# ssh-copy-id username@remote_host
                    == # ssh-copy-id root@192.168.5.20
     ```
-- Hiện ra output sau :
+    <img src=https://i.imgur.com/cYj3Lla.png>
 - Điều này có nghĩa máy tính hiện tại đang không nhận ra máy chủ đầu xa . Hiện tượng này sẽ xảy ra trong lần đầu kết nối tới 1 host mới . Gõ `yes` hoặc `ENTER` để tiếp tục .
 - Tiếp theo , công cụ sẽ dò quét file `id_rsa.pub` trên máy vừa tạo ra . Nếu tìm thấy , nó sẽ hỏi mật khẩu của user SSH :
+
+    <img src=https://i.imgur.com/NINaYkG.png>
 - Nhập mật khẩu và gõ `ENTER` . Công cụ sẽ kết nối tới Server bằng tài khoản được cung cấp . Sau đó nó sẽ copy nội dung file `~/.ssh/id_rsa.pub` vào 1 file tên là `authorized_keys` trong thư mục `~/.ssh` của Server .
 - Tại bước này , key `id_rsa.pub` đã được upload lên Server .
+
+    <img src=https://i.imgur.com/tjOivCH.png width=70%>
 ### Cách 2 - Copy Public Key sử dụng SSH
 - Nếu không có sẵn tiện ích `ssh-copy-id` , có thể sử dụng phương pháp truyền thống để copy **public key** sang Server .
 - Sử dụng lệnh pipe sau :
     ```
     [root@CentOS7-01]# cat ~/.ssh/id_rsa.pub | ssh root@192.168.5.20 "mkdir -p ~/.ssh && touch ~/.ssh/authorized_keys && chmod -R go= ~/.ssh && cat >> ~/.ssh/authorized_keys"
     ```
-- Có thể thấy output sau :
+    <img src=https://i.imgur.com/GNMSdqh.png>
+- Sau khi nhập password , nội dung file `id_rsa.pub` sẽ được copy sang file `~/.ssh/authorized_keys` .
+### Cách 3 - Copy thủ công
+- Nếu không có cách nào để truy cập Server qua SSH , có thể thực hiện copy thủ công qua USB hay bất cứ cách nào khác .
+- Xem nội dung file `id_rsa.pub` và copy :
+    ```
+    [root@CentOS7-01]# cat ~/.ssh/id_rsa.pub
+    ```
+    <img src=https://i.imgur.com/OPo4J07.png>
+- Truy cập máy Server :
+    ```
+    [root@CentOS7-02]# mkdir -p ~/.ssh
+    [root@CentOS7-02]# echo public_key_string >> ~/.ssh/authorized_keys   ( public_key_string là phần copy được từ id_rsa.pub )
+    [root@CentOS7-02]# chmod -R go= ~/.ssh    ( tùy chọn này sẽ gỡ bỏ hết các permission về Group và Others trong thư mục /.ssh )
+    ```
+## Bước 3 - Xác thực trên CentOS Server sử dụng SSH Key
+- Sau khi hoàn thành các bước trên , nhập lệnh sau để **SSH** vào Server :
+    ```
+    [root@CentOS7-01]# ssh root@192.168.5.20
+    ```
+    <img src=https://i.imgur.com/7xcXoCY.png>
+- Điều này có nghĩa máy tính hiện tại đang không nhận ra máy chủ đầu xa . Gõ `yes` hoặc `ENTER` để tiếp tục .
+- Nếu đã tạo **passphrase** thì ở bước này phải nhập thêm **passphrase** , nếu không thì có thể truy cập được luôn .
+## Bước 4 - Tắt xác thực mật khẩu trên Server
+- Mặc định , tồn tại song song cả 2 chế độ xác thực qua **SSH Key** và xác thực qua mật khẩu . Vì vậy , vẫn có khả năng Server bị tấn công bằng **Brute Force** .
+- Trên Server , mở file cấu hình `sshd` :
+    ```
+    [root@CentOS7-02]# vi /etc/ssh/sshd_config
+    : set nu
+    ```
+- Kéo xuống dòng `65` , sử  `yes` thành `no` :
+
+    <img src=https://i.imgur.com/WKPrrLH.png width=90%>
+
+- Restart dịch vụ **SSH** :
+    ```
+    [root@CentOS7-02]# systemctl restart sshd.service
+    ```
+- Sau đó , thực hiện kết nối **SSH** . Server sẽ hoàn toàn xác thực bằng **SSH Key** đã add trước đó mà không thể xác thực qua mật khẩu nữa .
 
 
