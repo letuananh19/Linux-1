@@ -49,3 +49,45 @@
     <img src=https://i.imgur.com/oiBeWh5.png>
 
 - ***Client*** sẽ phải bắt đầu kết nối **SSH** bằng việc bắt tay 3 bước **TCP** với ***host*** , đảm bảo kết nối bảo mật **symmetric** , xác thực định danh trong server đúng với các bản ghi trước ( thường đuợc lưu trữ trong file **RSA** ) , và trình diện đúng user được ủy quyền trên ***host*** để xác thực phiên kết nối .
+
+# LAB : SSH Keypairs
+
+<img src=https://i.imgur.com/wx6k7gh.png>
+
+## B1 - Tạo cặp key RSA trên SSH Client :
+- Bước đầu tiên là tạo ra cặp **SSH Key Pair** trên **SSH Client** hay chính máy tính thực hiện **SSH** :
+    ```
+    [root@CentOS7-01~]# ssh-keygen
+    ```
+- Mặc định , lệnh `ssh-keygen` sẽ tạo ra 1 cặp **RSA key pair `2048-bit`** , gần như đáp ứng đủ mọi trường hợp . Nếu muốn cặp key phức tạp hơn , có thể tạo key với độ dài **`4096-bit`** bằng option `-b 4096` .
+- Sau khi thực hiện lệnh , bạn sẽ nhìn thấy output sau :
+
+    <img src=https://i.imgur.com/gBqxbEB.png>
+
+- Gõ `ENTER` để lưu cặp key vào thư mục con `.ssh/` nằm trong thự mục `home` của user hiện hành , hoặc tự chọn 1 đường dẫn khác
+- Nếu trên máy đã có 1 cặp key từ trước đó , bạn sẽ nhìn thấy output sau :
+- Nếu chọn "`overwrite the key on disk`" , bạn sẽ không thể xác thực các key đang sử dụng trước đây nữa .
+- Sau khi lựa chọn , sẽ thấy output tiếp theo :
+- Đây là tùy chọn thêm 1 chuỗi mật khẩu , được khuyến nghị để tăng tính bảo mật . Nếu nhập chuỗi **passphrase** này , bạn sẽ phải gõ thêm chúng bất kỳ lúc nào sử dụng key ( chỉ trừ khi sử dụng phần mềm để SSH đã lưu trữ passphrase ) . Nếu không muốn sử dụng **passphrase** , có thể `ENTER` để bỏ qua . Nếu nhập **passphrase** , sẽ thấy output sau :
+## B2 - Copy Public Key vào SSH Server :
+- Cách nhanh nhất để copy **Public Key** trên CentOS là sử dụng tiện ích `ssh-copy-id` vì nó khá đơn giản . Nếu không có sẵn `ssh-copy-id` , cần phải copy 1 cách thủ công .
+### Cách 1 - Copy Public Key sử dụng `ssh-copy-id`
+- Công cụ `ssh-copy-id` thường có sẵn trên nhiều hệ điều hành . Nếu dùng cách này , cần có kết nối SSH bằng mật khẩu từ client đến Server :
+    ```
+    [root@CentOS7-01~]# ssh-copy-id username@remote_host
+                   == # ssh-copy-id root@192.168.5.20
+    ```
+- Hiện ra output sau :
+- Điều này có nghĩa máy tính hiện tại đang không nhận ra máy chủ đầu xa . Hiện tượng này sẽ xảy ra trong lần đầu kết nối tới 1 host mới . Gõ `yes` hoặc `ENTER` để tiếp tục .
+- Tiếp theo , công cụ sẽ dò quét file `id_rsa.pub` trên máy vừa tạo ra . Nếu tìm thấy , nó sẽ hỏi mật khẩu của user SSH :
+- Nhập mật khẩu và gõ `ENTER` . Công cụ sẽ kết nối tới Server bằng tài khoản được cung cấp . Sau đó nó sẽ copy nội dung file `~/.ssh/id_rsa.pub` vào 1 file tên là `authorized_keys` trong thư mục `~/.ssh` của Server .
+- Tại bước này , key `id_rsa.pub` đã được upload lên Server .
+### Cách 2 - Copy Public Key sử dụng SSH
+- Nếu không có sẵn tiện ích `ssh-copy-id` , có thể sử dụng phương pháp truyền thống để copy **public key** sang Server .
+- Sử dụng lệnh pipe sau :
+    ```
+    [root@CentOS7-01]# cat ~/.ssh/id_rsa.pub | ssh root@192.168.5.20 "mkdir -p ~/.ssh && touch ~/.ssh/authorized_keys && chmod -R go= ~/.ssh && cat >> ~/.ssh/authorized_keys"
+    ```
+- Có thể thấy output sau :
+
+
