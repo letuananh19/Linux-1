@@ -231,7 +231,59 @@
     ```
     # echo /dev/vg-demo1/lv-demo1 /demo1 xfs defaults 0 0
     ```
-## **5) Cách thay đổi dung lượng Logical volume trên LVM**
+## **5) Các bước tạo Stripped Volume - RAID 0**
+- Thêm 4 ổ cứng `sdb` , `sdc` , `sdd` , `sde` vào Server .
+- Các bước thực hiện tương tự **Linear Volumes** cho đến hết bước tạo **Volume Group** .
+- Tạo **stripped logical volume** :
+    - Từ 1 **volume group** , có thể tạo ra các **stripped volume group** bằng lệnh :
+        ```
+        # lvcreate -L 25G -i4 -I64 -n lv-stripped-1 vg-demo1
+        ```
+        - Trong đó :
+            - `-L` : chỉ ra dung lượng của **logical volume**
+            - `-i4` : thông báo tạo **stripped volume** trên 4 ổ **physical** ( có thể thay đổi )
+            - `-I64` : kích thước các luồng dữ liệu tuần tự ( **stripe** ) được ghi trên các **physical volume**
+            - `-n` : chỉ ra tên của **stripped logical volume**
+
+        <img src=https://i.imgur.com/YJsz0hh.png>
+
+    - Có thể tạo ra nhiều **stripped logical volume** từ 1 **volume group**
+    - Kiểm tra lại bằng lệnh `lvs` hoặc `lvdisplay` :
+
+        <img src=https://i.imgur.com/mV13ucw.png>
+    
+    - Có thể tạo ra **stripped volume** có dung lượng được tính bằng số **PE** ( ***physical extend*** - mặc định = `4MB` ) bằng lệnh :
+        ```
+        # lvcreate -l 100 -i4 -I64 -n lv-stripped-1 vg-demo1
+        ```
+        - Trong đó :
+            - `-l` : chỉ ra dung lượng tính bằng **PE** của **logical volume**
+        => Dung lượng của **volume** tạo ra là `100 * 4 = 400MB`
+        - Kiểm tra :
+
+            <img src=https://i.imgur.com/oZ38LeX.png>
+
+## **6) Các bước tạo Mirror Volume - RAID 1**
+- Thêm 4 ổ cứng `sdb` , `sdc` , `sdd` , `sde` vào Server .
+- Các bước thực hiện tương tự **Linear Volumes** cho đến hết bước tạo **Volume Group** .
+- Tạo **mirror logical volume** :
+    - Từ 1 **volume group** , có thể tạo ra các **mirror volume group** bằng lệnh :
+        ```
+        # lvcreate -L 15G -m1 -n lv-mirror-1 vg-demo1
+        ```
+        - Trong đó :
+            - `-L` : chỉ ra dung lượng của **logical volume**
+            - `-m1` : chỉ định tạo ra 1 **logical volume** với 1 **mirror** đi kèm ( nếu là `-m2` sẽ tạo ra 2 **mirror** , ổ sẽ bị chia làm 3 )
+            - `-n` : chỉ ra tên của **mirror logical volume**
+        - Kiểm tra : Lệnh trên tạo ra 1 **logical volume** với dung lượng `15G` đồng thời tạo ra 1 **mirror** `15G` ẩn => chiếm dung lượng `30G` của **volume group** :
+
+            <img src=https://i.imgur.com/0ewtv24.png>
+            <img src=https://i.imgur.com/LtlOoJJ.png>
+    - 1 **mirror logical volume** chia thiết bị được sao chép thành các vùng ( **region** ) có kích thước mặc định là `512kB` . Do giới hạn của hạ tầng , các **mirror** lớn hơn `1,5TB` không thể sử dụng các **region** có kích cỡ `512kB` mà yêu cầu kích cỡ tối thiểu bằng `2MB` . Với **mirror** dung lượng `4TB` , nên để **region** `4MB` . Với **mirror** dung lượng `5TB` , nên để **region** `8MB` :
+        ```
+        # lvcreate -L 3T -m1 -R 4 -n lv-mirror-1 vg-demo1
+        ```
+## **7) Cách thay đổi dung lượng Logical volume trên LVM**
 - **B1 :** Kiểm tra các thông tin hiện có : 
     ```
     # pvs
@@ -278,7 +330,7 @@
     ```
     # df -h
     ```
-## **6) Cách thay đổi dung lượng Volume Group trên LVM**
+## **8) Cách thay đổi dung lượng Volume Group trên LVM**
 - Chính là việc nhóm thêm **physical volume** hay bỏ nhóm **physical volume** ra khỏi **volume group** .
 - **B1 :** Kiểm tra thông tin partition :
     ```
@@ -297,8 +349,8 @@
     ```
     # vgreduce /dev/vg-demo1 /dev/sdb2
     ```
-## **7) Cách xóa Logical Volumes , Volume Group , Physical Volume**
-### **7.1) Xóa Logical Volume**
+## **9) Cách xóa Logical Volumes , Volume Group , Physical Volume**
+### **9.1) Xóa Logical Volume**
 - **B1 :** Unmount **logical volume** :
     ```
     # umount /dev/vg-demo1/lv-demo1
@@ -307,15 +359,13 @@
     ```
     # lvremove /dev/vg-demo1/lv-demo1
     ```
-### **7.2) Xóa Volume Group**
+### **9.2) Xóa Volume Group**
 - Trước khi xóa **volume group** , phải đảm bảo xóa hết **logical volume** :
 - Xóa **volume group** bằng lệnh :
     ```
     # vgremove /dev/vg-demo1
     ```
-### **7.3) Xóa Physical Volume**
+### **9.3) Xóa Physical Volume**
 - ```
   # pvremove /dev/sdb2
   ```
-
-
