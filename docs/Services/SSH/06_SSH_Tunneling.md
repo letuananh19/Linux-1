@@ -19,3 +19,37 @@
     ```
     => Lệnh này cho phép mở kết nối tới **jump server** `gw.example.com` và forward bất kì kết nối nào từ port `80` của máy local đến port `80` của máy `intra.example.com` .
 
+
+# LAB : SSH Tunneling
+## **1) Mô hình**
+<img src=https://i.imgur.com/r3UbzpS.png>
+
+| | IP | LAN/WAN |
+|-|----|---------|
+| **SSH_Client** | `10.0.0.10/24` | WAN ( `ens33` ) |
+| **Jump_Server** | `10.0.0.20/24` | WAN ( `ens33` ) |
+|             | `172.16.0.20/24` | LAN ( `ens37` ) |
+| **SSH_Server** | `172.16.0.10/24` | LAN ( `ens33` ) |
+> ### **Mục tiêu 1** : **SSH local port forwarding**<br> Từ **SSH CLient** thực hiện kết nối SSH đến **SSH Server** thông qua **Jump Server**
+- **B1 :** Đặt địa chỉ IP chính xác :
+    - Trên **SSH Client** :
+        ```
+        # ifconfig ens33 10.0.0.10 netmask 255.255.255.0 up
+        ```
+        <img src=https://i.imgur.com/tH2KBW6.png>
+    - Trên **Jump Server** :
+        ```
+        # ifconfig ens33 10.0.0.20 netmask 255.255.255.0 up
+        # ifconfig ens33 172.16.0.20 netmask 255.255.255.0 up
+        ```
+        <img src=https://i.imgur.com/FLfybQa.png>
+    - Trên **SSH Server** :
+        ```
+        # ifconfig ens33 172.16.0.10 netmask 255.255.255.0 up
+        ```
+        <img src=https://i.imgur.com/9UmnQUo.png>
+
+- **B2 :** Trên **SSH_Client** thực hiện SSH vào **SSH_Server** qua **Jump_Server** :
+    ```
+    # ssh -L 2222:172.16.0.10:22 root@10.0.0.20
+    ```
