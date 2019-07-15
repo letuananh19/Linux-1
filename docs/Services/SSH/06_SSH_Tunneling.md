@@ -21,35 +21,52 @@
 
 
 # LAB : SSH Tunneling
-## **1) Mô hình**
+## **Mô hình thực tế**
 <img src=https://i.imgur.com/r3UbzpS.png>
+
+## **Mô hình LAB**
+<img src=https://i.imgur.com/BtJjnGl.png>
 
 | | IP | LAN/WAN |
 |-|----|---------|
-| **SSH_Client** | `10.0.0.10/24` | WAN ( `ens33` ) |
-| **Jump_Server** | `10.0.0.20/24` | WAN ( `ens33` ) |
-|             | `172.16.0.20/24` | LAN ( `ens37` ) |
-| **SSH_Server** | `172.16.0.10/24` | LAN ( `ens33` ) |
-> ### **Mục tiêu 1** : **SSH local port forwarding**<br> Từ **SSH CLient** thực hiện kết nối SSH đến **SSH Server** thông qua **Jump Server**
+| **SSH_Client** | `10.0.0.10/24` | WAN ( `ens37` ) |
+| **Jump_Server** | `10.0.0.20/24` | WAN ( `ens37` ) |
+|             | `172.16.0.20/24` | LAN ( `ens38` ) |
+| **SSH_Server** | `172.16.0.10/24` | LAN ( `ens37` ) |
+### **1) Local port forwarding**
+> **Mục tiêu** : Từ **SSH CLient** thực hiện mở 1 socket kết nối SSH đến **SSH Server** thông qua **Jump Server** 
 - **B1 :** Đặt địa chỉ IP chính xác :
     - Trên **SSH Client** :
         ```
         # ifconfig ens33 10.0.0.10 netmask 255.255.255.0 up
         ```
-        <img src=https://i.imgur.com/tH2KBW6.png>
+        <img src=https://i.imgur.com/m8XHLzM.png>
     - Trên **Jump Server** :
         ```
         # ifconfig ens33 10.0.0.20 netmask 255.255.255.0 up
         # ifconfig ens33 172.16.0.20 netmask 255.255.255.0 up
         ```
-        <img src=https://i.imgur.com/FLfybQa.png>
+        <img src=https://i.imgur.com/rMqOkiJ.png>
     - Trên **SSH Server** :
         ```
         # ifconfig ens33 172.16.0.10 netmask 255.255.255.0 up
         ```
-        <img src=https://i.imgur.com/9UmnQUo.png>
+        <img src=https://i.imgur.com/9dEYNy3.png>
 
-- **B2 :** Trên **SSH_Client** thực hiện SSH vào **SSH_Server** qua **Jump_Server** :
+- **B2 :** Thay cho việc phải SSH từ **SSH Client** lên **JumpServer** , rồi tiếp tục SSH lên đích là **SSH Server** , chúng ta có thể mở một socket ở phía **SSH Client** để lên **SSH Server** như sau :
     ```
     # ssh -L 2222:172.16.0.10:22 root@10.0.0.20
     ```
+    <img src=https://i.imgur.com/C4SA5A0.png>
+
+    - Sau khi kết nối thành công , phía **SSH Client** sẽ thấy một socket là `127.0.0.1:2222` được mở bởi SSH :
+
+        <img src=https://i.imgur.com/kW3uiSA.png>
+
+- **B3 :** Mở 1 tab Terminal mới trên **SSH Client** . Bây giờ đứng từ **SSH Client** chúng ta có thể kết nối SSH lên **SSH Server** thông qua socket này như sau :
+    ```
+    # ssh root@127.0.0.1 -p 2222
+    ```
+    <img src=https://i.imgur.com/QvovCtz.png>
+
+### **2) Remote port forwarding**
