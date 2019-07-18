@@ -21,10 +21,10 @@
 
 
 # LAB : SSH Tunneling
-## **Mô hình thực tế**
+### **Mô hình thực tế**
 <img src=https://i.imgur.com/r3UbzpS.png>
 
-## **Mô hình LAB**
+### **Mô hình LAB**
 <img src=https://i.imgur.com/BtJjnGl.png>
 
 | | IP | LAN/WAN |
