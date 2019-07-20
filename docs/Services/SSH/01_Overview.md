@@ -12,12 +12,12 @@
     - ***Client*** là máy tính đang thực hiện truy cập từ xa vào ***host*** .
 - Có 3 công nghệ mã hóa khác nhau được sử dụng trong **SSH** là : ***symmetric encryption*** , ***asymmetric encryption*** và ***hashing*** .
 ### **3.1) Symmetric Encryption ( *mã hóa đối xứng* )**
-- **Symmetric Encryption** là 1 dạng mã hóa mà sử dụng 1 **secret key** cho cả việc mã hóa và giải mã gói tin bởi ***host*** và ***client*** . Do vậy , bất cứ ai có được **secret key** đều có thể giải mã gói tin .
+- **Symmetric Encryption** là 1 dạng mã hóa sử dụng **secret key** cho cả việc mã hóa và giải mã gói tin bởi ***host*** và ***client*** . Do vậy , bất cứ ai có được **secret key** đều có thể giải mã gói tin .
 
     <img src=https://i.imgur.com/54cAASp.png>
 
 - **Symmetric Encryption** thường được gọi là **shared-key** hoặc **shared-secret** encryption . Thường chỉ có 1 **key** được sử dụng hoặc đôi khi là 1 cặp **key** trong khi từ **key** này có thể tính toán được ra **key** kia .
-- **Symmetric keys** được sử dụng để mã hóa toàn bộ giao tiếp giữa 2 máy trong suốt phiên **SSH** . Cả server và client truy gốc **secret key** bằng việc sử dụng 1 thuật toán đồng nhất , và **key** sau khi được tổng hợp sẽ không được tiết lộ với bất kỳ bên thứ 3 nào . Quá trình tạo ra **symmetric key** được tiến hành bởi *thuật toán trao đổi key mã hóa* ( ***key exchange algorithm*** ) . Điều làm cho thuật toán này đặc biệt an toàn là **key** không bao giờ được trao đổi giữa ***client*** và ***host*** . Thay vào đó , 2 máy tính trao đổi 1 phần dữ liệu công khai và sau đó thực hiện tính toán độc lập ra **secret key** . Kể cả khi có 1 máy khác bắt được phần dữ liệu công khai này , nó cũng không thể tính toán được **secret key** bởi không biết *thuật toán trao đổi key* .
+- **Symmetric keys** được sử dụng để mã hóa toàn bộ giao tiếp giữa 2 máy trong suốt phiên **SSH** . Cả server và client truy gốc **secret key** bằng việc sử dụng 1 thuật toán đồng nhất , và **key** sau khi được tổng hợp sẽ không được tiết lộ với bất kỳ bên thứ 3 nào . Quá trình tạo ra **symmetric key** được tiến hành bởi *thuật toán trao đổi key mã hóa* ( ***key exchange algorithm*** ) . Điều làm cho thuật toán này đặc biệt an toàn là **key** không bao giờ được trao đổi giữa ***client*** và ***host*** . Thay vào đó , 2 máy tính trao đổi 1 phần thông tin chung và sau đó thực hiện tính toán độc lập ra **secret key** . Kể cả khi có 1 máy khác bắt được phần thông tin này , nó cũng không thể tính toán được **secret key** bởi không biết *thuật toán trao đổi key* .
 - Có rất nhiều thuật toán mã hóa ***( cypher )*** tồn tại , bao gồm **AES ( Advanced Encryption Standard )** , **CAST128** , **Blowfish** ,... Trước khi thiết lập một kết nối bảo mật , ***client*** và ***host*** sẽ quyết định xem dùng thuật toán mã hóa nào bằng cách xuất ra 1 danh sách các thuật toán mã hóa được hỗ trợ theo thứ tự ưu tiên . Thuật toán được ưu tiên nhất từ phía ***client*** và có xuất hiện trong danh sách thuật toán hỗ trợ của ***host*** sẽ được sử dụng làm thuật toán mã hóa chung . <br>**VD :** Ubuntu 14.04 LTS khi thực hiện kết nối với máy khác thông qua **SSH** , chúng sẽ sử dụng **aes128-ctr** là thuật toán mặc định .
 ### **3.2) Asymmetric Encryption ( *mã hóa bất đối xứng* )**
 - Không giống **symmectric encryption** , **asymmetric encryption** sử dụng 2 **key** riêng biệt để mã hóa và giải mã . Hai loại **key** được biết đến với tên gọi là **public key** và **private key** . Cùng với nhau , chúng tạo thành 1 cặp **key-pair** .
@@ -32,7 +32,7 @@
 ### **3.3) Hashing**
 - **Hashing** một chiều là 1 dạng mã hóa khác được sử dụng bởi **SSH** .
 - Chức năng của chúng khác với 2 dạng mã hóa trên theo hướng rằng chúng sẽ không bao giờ bị giải mã .
-- Chúng tạo ra 1 giá trị độc nhất cho phần đuôi được thêm vào của mỗi đoạn dữ liệu khiến chúng không thể bị khai thác . Điều này khiến **hash** hoàn toàn không thể bị đảo ngược
+- Chúng tạo ra 1 giá trị độc nhất cho phần đuôi được thêm vào của mỗi đoạn dữ liệu khiến chúng không thể bị khai thác . Điều này khiến **hash** hoàn toàn không thể bị đảo ngược .
 
     <img src=https://i.imgur.com/S97o5ia.png>
 
@@ -49,7 +49,14 @@
     <img src=https://i.imgur.com/oiBeWh5.png>
 
 - ***Client*** sẽ phải bắt đầu kết nối **SSH** bằng việc bắt tay 3 bước **TCP** với ***host*** , đảm bảo kết nối bảo mật **symmetric** , xác thực định danh trong server đúng với các bản ghi trước ( thường đuợc lưu trữ trong file **RSA** ) , và trình diện đúng user được ủy quyền trên ***host*** để xác thực phiên kết nối .
-
+- Khi ***client*** cố kết nối tới server qua TCP , ***server*** sẽ trình ra các kỹ thuật mã hóa và những phiên bản liên quan nó hỗ trợ . Nếu ***client*** cũng có protocol tương ứng và phiên bản đúng như vậy , một thỏa thuật sẽ được đặt ra và kết nối bát đầu tiếp nhận protocol . ***Server*** cũng sử dụng một **symmetric public key** mà client có thể dùng để xác thực tính chính xác của server .
+- Khi đã được thiết lập , cả 2 bên sử dụng thuật toán **Diffie-Hellman** để tạo **symmetrical key** . Thuật toán này cho phép cả ***client*** và ***server*** có cùng một key chung được dùng để mã hóa toàn bộ liên lạc sau này . Thuật toán **Diffie-Hellman** được giải thích như sau :
+    - Cả ***client*** và ***server*** đồng ý dựa trên một số nguyên lớn , dĩ nhiên là không có bất kỳ tính chất chung nào . Số này được gọi là **seed value** .
+    - Tiếp theo , cả 2 bên đồng ý một cách mã hóa được tạo ra từ **seed value** bằng một dạng thuật toán nhất định . Những cơ chế này là nguồn tạo mã hóa , hoạt đông lớn trên **seed value** . Ví dụ như **AES ( *Advanced Encryption Standard* )** .
+    - Cả 2 bên độc lập tạo một số khác . Nó được dùng như là một **private key** bí mật cho tương tác .
+    - **Private key** mới tạo này , với số chung và thuật toán mã hóa ở trên ( **AES** ) được dùng để tạo ra một **public key** được phân phối cho máy còn lại .
+    - 2 bên sau đó sử dụng **private key** của chính nó , **public key** của máy còn lại và số nguyên ban đầu để tạo ra một key chung cuối cùng . Key này độc lập được tính toán bởi cả 2 máy nhưng sẽ tạo ra một key mã hóa giống nhau trên cả 2 .
+    - Bây giờ cả 2 đã có **shared key** , chúng có thể tạo mã hóa symmetric cho cả phiên SSH . Một key chung được sử dung để mã hóa và giải mã gói tin .<br>=> Bây giờ phiên giao dịch được mã hóa symmetric đã được thiết lập, chứng thực cho user sẽ được tiến hành.
 # LAB : SSH Keypairs
 
 <img src=https://i.imgur.com/wx6k7gh.png>
