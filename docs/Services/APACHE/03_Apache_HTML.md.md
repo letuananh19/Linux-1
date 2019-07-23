@@ -65,11 +65,13 @@
 
 
 ### **Cách disable Start page on Apache**
-- Khi chưa tạo file `index.html` , khi truy cập địa chỉ ...
+- Khi chưa tạo file `index.html` , khi truy cập địa chỉ của Web_Server , sẽ hiện ra State page :
 
     <img src=https://i.imgur.com/xyRnyAE.png>
 
-- 
+- Nếu không muốn qua Start page , có thể xóa file `welcome.conf` để đến thẳng folder Web :
     ```
     # rm -f /etc/httpd/conf.d/welcome.conf
+    # systemctl restart httpd
     ```
+    <img src=https://i.imgur.com/ZwtRDAz.png>
