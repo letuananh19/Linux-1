@@ -12,9 +12,9 @@
         # vi /etc/httpd/conf/httpd.conf
         set nu
         ```
-        - Tìm tới dòng `41` và thêm các port cho các IP ảo :
+        - Tìm tới dòng `42` và thêm các port mở thêm ( số lượng port `LISTEN` bằng với số website ) :
             
-            <img src=https://i.imgur.com/zO9KrPX.png>
+            <img src=https://i.imgur.com/AszzPhU.png>
 
     - Khởi động lại dịch vụ `httpd` :
         ```
@@ -25,6 +25,7 @@
         ```
         # mkdir /var/www/html/web1
         # mkdir /var/www/html/web2
+        # mkdir /var/www/html/web3
         ```
     - Tạo nội dung file `index.html` cho các website :
         ```
@@ -66,6 +67,16 @@
             CustomLog /var/www/html/web2/access.log combined
         </VirtualHost>
         ```
+        ```
+        # vi /etc/httpd/conf.d/web3.conf
+        <VirtualHost *:9000>
+            ServerName web3.com
+            ServerAlias www.web3.com
+            DocumentRoot /var/www/html/web3
+            ErrorLog /var/www/html/web3/error.log
+            CustomLog /var/www/html/web3/access.log combined
+        </VirtualHost>
+        ```
     - Trong đó :
         - `ServerName` : tên của website dùng để gõ trên trình duyệt
         - `ServerAlias` : tên gọi khác của website ( thường cấu hình `www` hoặc `non www`)
@@ -80,3 +91,7 @@
     - `http://172.16.0.5:8080`
 
         <img src=https://i.imgur.com/93e1m8X.png>
+
+    - `http://172.16.0.5:9000`
+
+        <img src=https://i.imgur.com/WYwHHuk.png>
